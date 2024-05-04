@@ -1,4 +1,4 @@
-import React, { useId} from "react";
+import React, {useId} from "react";
 
 const Input = (props: {
     className?: string;
@@ -7,8 +7,9 @@ const Input = (props: {
     placeholder?: string;
     type?: string;
     label?: string;
+    disabled?: boolean;
 }) => {
-    const {label, className, onChange} = props;
+    const {label, className, onChange, disabled} = props;
     const id = useId()
 
     return (
@@ -22,7 +23,7 @@ const Input = (props: {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 
                 text-sm rounded-lg 
                 focus:ring-blue-500 focus:border-blue-500 
-                block w-full p-3 ${className}`}
+                block w-full p-3 ${className} ${disabled ? 'cursor-not-allowed bg-gray-300' : ''}`}
                 onChange={onChange}
             />
         </>

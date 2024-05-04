@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from "../Modal";
 import Input from "../Input";
 import Button from "../Button";
@@ -8,8 +8,10 @@ import {Assignee} from "../../models";
 const AddUser = (props: {
     open: boolean;
     onCancel: () => void;
+    actualiseDatas: (data: Assignee) => void;
+    user?: Assignee | null
 }) => {
-    const {open, onCancel} = props;
+    const {open, onCancel, actualiseDatas, user} = props;
     const service = new Services(true);
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -18,9 +20,25 @@ const AddUser = (props: {
     const [phone, setPhone] = useState<string>('');
     const [error, setError] = useState<Object>({});
 
+    const initData = (user: Assignee) => {
+        setName(user.name)
+        setEmail(user.email)
+        setPhone(user.phone)
+    }
+    const resetField = () => {
+        setName('')
+        setEmail('')
+        setPhone('')
+    }
+
+    useEffect(() => {
+        if (user) {
+            initData(user)
+        }
+    }, [user])
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
-        console.log('name', name, 'value', value)
         switch (name) {
             case 'name':
                 setName(value);
@@ -33,7 +51,6 @@ const AddUser = (props: {
                 break;
         }
     }
-
     const nameValidation = (name: string) => name.trim().length >= 3
     const emailValidation = (email: string) => email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 
@@ -55,25 +72,47 @@ const AddUser = (props: {
         const data: Assignee = {name, email, phone}
 
 
-        setTimeout(() => {
-            service.addUser(data)
-                .then(() => {
-                    onCancel()
-                })
-                .catch((err) => {
-                    try{
-                        const {response} = err
-                        setError(response.data)
-                    }catch (e) {
-                        console.log('e', e)
-                    }
-                })
-                .finally(() => {
-                    setLoading(false)
-                })
-        }, 1000)
-
-
+        if (user) {
+            setTimeout(() => {
+                service.editUser({name: data.name, data})
+                    .then(() => {
+                        resetField()
+                        actualiseDatas(data)
+                        onCancel()
+                    })
+                    .catch((err) => {
+                        try {
+                            const {response} = err
+                            setError(response.data)
+                        } catch (e) {
+                            console.log('e', e)
+                        }
+                    })
+                    .finally(() => {
+                        setLoading(false)
+                    })
+            }, 500)
+        } else {
+            setTimeout(() => {
+                service.addUser(data)
+                    .then(() => {
+                        resetField()
+                        actualiseDatas(data)
+                        onCancel()
+                    })
+                    .catch((err) => {
+                        try {
+                            const {response} = err
+                            setError(response.data)
+                        } catch (e) {
+                            console.log('e', e)
+                        }
+                    })
+                    .finally(() => {
+                        setLoading(false)
+                    })
+            }, 500)
+        }
     }
 
 
@@ -82,13 +121,13 @@ const AddUser = (props: {
             <Modal
                 open={open}
                 onCancel={onCancel}
-                title={"Ajouter un utilisateur"}
+                title={`${user ? 'Modifier un utilisateur' : 'Ajouter un utilisateur'}`}
                 footer={[
                     <Button onClick={onCancel} className={'mr-2'} key={'cancel'}>
                         Annuler
                     </Button>,
                     <Button loading={loading} onClick={onSubmit} className={'bg-primary text-white'} key={'submit'}>
-                        Enregistrer
+                        {user ? 'Modifier' : 'Ajouter'}
                     </Button>
                 ]}
             >
@@ -102,6 +141,7 @@ const AddUser = (props: {
                             onChange={onChange}
                             id={'name'}
                             className={`${error?.name ? 'border-2 border-danger' : ''}`}
+                            disabled={!!user}
                         />
                         <small className={'text-danger'}>{error?.name}</small>
                     </div>
