@@ -1,12 +1,14 @@
-import React, { ReactNode, MouseEventHandler } from "react";
+import React, {ReactNode, MouseEventHandler} from "react";
+import {LoadingOutlined} from "@ant-design/icons";
 
 const Button = (props: {
     children?: ReactNode;
     className?: string;
     icon?: ReactNode;
+    loading?: boolean;
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }) => {
-    const { icon, children, className, onClick } = props;
+    const {icon, children, className, onClick, loading} = props;
 
     return (
         <button
@@ -22,11 +24,11 @@ const Button = (props: {
             hover:bg-primary-2 focus:ring-4 
             focus:outline-none 
             focus:ring-blue-300 
-            ${className}
-            `}
+            ${className}`}
             onClick={onClick}
+            disabled={!!loading}
         >
-            {icon}
+            {loading ? (<LoadingOutlined className={'mr-2'}/>) : icon}
             {children}
         </button>
     );

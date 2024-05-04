@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import Sidebar from "./Components/SideBar";
-import DataTable from "./Components/Table";
 import Button from "./Components/Button";
+import  {Outlet} from 'react-router-dom'
 
 function App() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -60,7 +60,7 @@ function App() {
                     </div>
                     <main className={'rounded-2xl bg-white m-2 mx-4'}>
                         <div className="shadow-lg p-4">
-                            <DataTable/>
+                            <Outlet />
                         </div>
                     </main>
                 </div>
