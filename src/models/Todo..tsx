@@ -8,16 +8,16 @@ export enum Priority {
 }
 
 export const PRIORITY_OPTIONS = [
-    {value: Priority.HIGH, label: "Elevée"},
-    {value: Priority.MEDIUM, label: "Normale"},
-    {value: Priority.LOW, label: "Faible"}
+    {value: Priority.HIGH, label: 'high'},
+    {value: Priority.MEDIUM, label: "medium"},
+    {value: Priority.LOW, label: "low"}
 ]
 
 export const LABEL_OPTIONS = [
-    {value: Label.BUG, label: "Bug"},
-    {value: Label.FEATURE, label: "Fonctionnalité"},
-    {value: Label.IMPROVEMENT, label: "Amélioration"},
-    {value: Label.DEPLOY, label: "Deployé"}
+    {value: Label.BUG, label: "bug"},
+    {value: Label.FEATURE, label: "feature"},
+    {value: Label.IMPROVEMENT, label: "improvement"},
+    {value: Label.DEPLOY, label: "deploy"}
 ]
 
 export enum Label {

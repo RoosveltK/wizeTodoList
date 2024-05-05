@@ -7,9 +7,10 @@ import {v4 as uuidv4} from "uuid";
 const prefixUsers = '/users'
 const prefixTodos = '/todos'
 
-const APP_KEY = {
+export const APP_KEY = {
     USERS: "users",
-    TODOS: "todos"
+    TODOS: "todos",
+    LANG:'lang'
 }
 
 class Services {

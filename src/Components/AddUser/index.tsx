@@ -4,6 +4,7 @@ import Input from "../Input";
 import Button from "../Button";
 import Services from "../../services";
 import {Assignee} from "../../models";
+import { useTranslation } from 'react-i18next';
 
 const AddUser = (props: {
     open: boolean;
@@ -13,6 +14,7 @@ const AddUser = (props: {
 }) => {
     const {open, onCancel, actualiseDatas, user} = props;
     const service = new Services(true);
+    const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
@@ -59,10 +61,10 @@ const AddUser = (props: {
         setError({})
         const errors = {}
         if (!nameValidation(name)) {
-            errors.name = 'Le nom doit contenir au moins 3 caractères'
+            errors.name = 'name validation'
         }
         if (!emailValidation(email)) {
-            errors.email = 'Veuillez entrer un email valide'
+            errors.email = 'email error'
         }
         if (Object.keys(errors).length > 0) {
             setError(errors)
@@ -121,21 +123,21 @@ const AddUser = (props: {
             <Modal
                 open={open}
                 onCancel={onCancel}
-                title={`${user ? 'Modifier un utilisateur' : 'Ajouter un utilisateur'}`}
+                title={`${user ? t('update user') : t('add user')}`}
                 footer={[
                     <Button onClick={onCancel} className={'mr-2'} key={'cancel'}>
-                        Annuler
+                        {t('cancel')}
                     </Button>,
                     <Button loading={loading} onClick={onSubmit} className={'bg-primary text-white'} key={'submit'}>
-                        {user ? 'Modifier' : 'Ajouter'}
+                        {user ? t('update') : t('add')}
                     </Button>
                 ]}
             >
                 <div>
                     <div className={'mb-3'}>
                         <Input
-                            label={'Nom'}
-                            placeholder={'Entrez le nom de la personne'}
+                            label={t('name')}
+                            placeholder={t('enter name')}
                             value={name}
                             name={'name'}
                             onChange={onChange}
@@ -143,12 +145,12 @@ const AddUser = (props: {
                             className={`${error?.name ? 'border-2 border-danger' : ''}`}
                             disabled={!!user}
                         />
-                        <small className={'text-danger'}>{error?.name}</small>
+                        <small className={'text-danger'}>{t(error?.name)}</small>
                     </div>
                     <div className={'mb-3'}>
                         <Input
                             label={'Email'}
-                            placeholder={'Entrez l\'email la personne'}
+                            placeholder={t('enter email')}
                             value={email}
                             name={'email'}
                             onChange={onChange}
@@ -156,12 +158,12 @@ const AddUser = (props: {
                             type={'email'}
                             className={`${error?.email ? 'border-2 border-danger' : ''}`}
                         />
-                        <small className={'text-danger'}>{error?.email}</small>
+                        <small className={'text-danger'}>{t(error?.email)}</small>
                     </div>
                     <div className={'mb-3'}>
                         <Input
-                            label={'Téléphone'}
-                            placeholder={'Entrez le numéro de téléphone de la personne'}
+                            label={t('phone')}
+                            placeholder={t('enter phone')}
                             value={phone}
                             name={'phone'}
                             onChange={onChange}

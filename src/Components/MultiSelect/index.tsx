@@ -1,6 +1,6 @@
 import {SelectOption} from "../Select";
 import React, {useId, ChangeEvent, useEffect} from "react";
-
+import { useTranslation } from 'react-i18next';
 interface MultiSelectProps {
     className?: string;
     onChange?: (value: SelectOption[]) => void;
@@ -18,10 +18,11 @@ const MultiSelect = (props: MultiSelectProps) => {
     const {
         name,
         onChange,
-        placeholder = 'Choisissez une valeur',
+        placeholder = 'choose value',
         value,
         options = []
     } = props;
+    const { t } = useTranslation();
     const id = useId();
     const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
 
@@ -57,7 +58,7 @@ const MultiSelect = (props: MultiSelectProps) => {
 
             <div
                 className={`w-full h-full max-w-[200px] max-h-16 overflow-y-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer after:content-['▼'] after:text-xs after:ml-1`}>
-                {selectedOptions.length > 0 ? showSelectedOptions().join(", ") : placeholder}
+                {selectedOptions.length > 0 ? <>{t(showSelectedOptions().join(", "))}</> : t(placeholder)}
             </div>
 
             <div
@@ -76,7 +77,7 @@ const MultiSelect = (props: MultiSelectProps) => {
                                         className="cursor-pointer"
                                         onChange={() => toggleOption(option.value)}
                                     />
-                                    <span className="ml-1">{option.label}</span>
+                                    <span className="ml-1">{t(option.label)}</span>
                                 </label>
                             </li>
                         );

@@ -8,8 +8,10 @@ import {DeleteIcon, EditIcon} from "../utils.tsx";
 import {Assignee} from "../models";
 import Modal from "../Components/Modal";
 import Input from "../Components/Input";
+import { useTranslation } from 'react-i18next';
 
 const User = () => {
+    const { t } = useTranslation();
     const service = new Services(true);
     const [open, setOpen] = useState(false);
     const [allUsers, setAllUsers] = useState<Assignee[]>([]);
@@ -74,11 +76,11 @@ const User = () => {
     }
 
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Nom', width: 200},
+        {field: 'name', headerName: t('name'), width: 200},
         {field: 'email', headerName: 'Email', width: 200},
         {
             field: 'phone',
-            headerName: 'Téléphone',
+            headerName: t('phone'),
             width: 130
         },
         {
@@ -129,13 +131,13 @@ const User = () => {
     return (
         <>
             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t mb-3">
-                <h3 className="text-xl font-semibold text-gray-900">Liste des personnes</h3>
+                <h3 className="text-xl font-semibold text-gray-900">{t('person list')}</h3>
             </div>
 
             <div className={'flex justify-between mb-7'}>
                 <div>
                     <Input
-                        placeholder={'Rechercher...'}
+                        placeholder={t('search')}
                         value={search}
                         onChange={onSearchUser}
                     />
@@ -153,7 +155,7 @@ const User = () => {
                         </svg>
                     }
                 >
-                    Ajouter une personne
+                    {t('add person')}
                 </Button>
             </div>
 
@@ -172,19 +174,19 @@ const User = () => {
             />
 
             <Modal
-                title={'Confirmation de suppression'}
+                title={t('confirm delete')}
                 open={openDelete}
                 onCancel={onCancelD}
                 footer={[
-                    <Button className={'mr-2'} onClick={onCancelD}>Annuler</Button>,
+                    <Button className={'mr-2'} onClick={onCancelD}>{t('cancel')}</Button>,
                     <Button
                         onClick={() => deleteUser(userTemp?.name)}
                         className={'bg-danger text-white border-none border-danger  hover:bg-red-500'}>
-                        Supprimer
+                        {t('delete')}
                     </Button>
                 ]}
             >
-                <p>Voulez vous vraiment supprimer <span className={'font-semibold'}>{userTemp?.name}</span> ?</p>
+                <p>{t('ask delete')} <span className={'font-semibold'}>{userTemp?.name}</span> ?</p>
             </Modal>
         </>
     );

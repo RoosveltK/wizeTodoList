@@ -8,6 +8,9 @@ import {
 import './index.css'
 import {routes} from "./routes.tsx";
 import Error from "./pages/Error.tsx";
+import './i18n.ts'
+
+
 
 const router = createBrowserRouter([
     {
@@ -19,6 +22,7 @@ const router = createBrowserRouter([
         errorElement: <Error/>,
     },
 ]);
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

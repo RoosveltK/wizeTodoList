@@ -10,7 +10,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import MultiSelect from "../MultiSelect";
 import InputDate from "../InputDate";
 import dayjs from "dayjs";
-
+import { useTranslation } from 'react-i18next';
 
 const AddTask = (props: {
     open: boolean;
@@ -19,6 +19,8 @@ const AddTask = (props: {
     task?: Todo | null,
     users?: Assignee[]
 }) => {
+    const { t } = useTranslation();
+
     const {open, onCancel, actualiseDatas, task, users = []} = props;
     const service = new Services(true);
 
@@ -82,10 +84,10 @@ const AddTask = (props: {
         setError({})
         const errors = {}
         if (!titleValidation(title)) {
-            errors.title = 'Le Titre doit contenir au moins 3 caractères'
+            errors.title = 'title error'
         }
         if (!assignee) {
-            errors.assignee = 'Veuillez choisir une personne'
+            errors.assignee = 'person error'
         }
 
         if (Object.keys(errors).length > 0) {
@@ -160,27 +162,27 @@ const AddTask = (props: {
                 width={1000}
                 open={open}
                 onCancel={onCancel}
-                title={`${task ? 'Modifier une tâche' : 'Ajouter une tâche'}`}
+                title={`${task ? t('edit task') : t('add task')}`}
                 footer={[
                     <Button onClick={onCancel} className={'mr-2'} key={'cancel'}>
-                        Annuler
+                        {t('cancel')}
                     </Button>,
                     <Button loading={loading} onClick={onSubmit} className={'bg-primary text-white'} key={'submit'}>
-                        {task ? 'Modifier' : 'Ajouter'}
+                        {task ? t('update') :  t('add')}
                     </Button>
                 ]}
             >
                 <div>
                     <div className={'mb-3'}>
                         <Input
-                            placeholder={'Donnez un titre à la tâche'}
+                            placeholder={t('give title')}
                             value={title}
                             name={'title'}
                             onChange={onChange}
                             id={'name'}
                             className={`${error?.title ? 'border-2 border-danger' : ''}`}
                         />
-                        <small className={'text-danger'}>{error?.title}</small>
+                        <small className={'text-danger'}>{t(error?.title)}</small>
                     </div>
                     <div className={'grid grid-cols-1 xl:grid-cols-4 xl:gap-y-0 gap-y-2  mb-3 gap-x-4'}>
                         <div>
@@ -190,11 +192,11 @@ const AddTask = (props: {
                                 options={users}
                                 sx={{width: '100%'}}
                                 getOptionLabel={(option) => option.name}
-                                renderInput={(params) => <TextField {...params} label="Personne"/>}
+                                renderInput={(params) => <TextField {...params} label={t('person')}/>}
                                 onChange={(event, value: Assignee) => setAssignee(value)}
                                 value={assignee}
                             />
-                            <small className={'text-danger'}>{error?.assignee}</small>
+                            <small className={'text-danger'}>{t(error?.assignee)}</small>
                         </div>
 
 
@@ -202,7 +204,7 @@ const AddTask = (props: {
                             <InputDate
                                 value={startDate}
                                 name={'startDate'}
-                                placeholder={'Date de début'}
+                                placeholder={t('startAt')}
                                 type="date"
                                 onChange={onChange}
                                 className={`${error?.startDate ? 'border-2 border-danger' : ''}`}
@@ -214,7 +216,7 @@ const AddTask = (props: {
                             <Select
                                 options={PRIORITY_OPTIONS}
                                 name={'priority'}
-                                placeholder={'Priorité'}
+                                placeholder={t('priority')}
                                 onChange={onChange}
                                 value={priority}
                             />
@@ -240,7 +242,7 @@ const AddTask = (props: {
                             onChange={onChange}
                             rows="4"
                             className={`block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500`}
-                            placeholder="Description de la tâche ..."
+                            placeholder="Description ..."
                         />
                     </div>
 

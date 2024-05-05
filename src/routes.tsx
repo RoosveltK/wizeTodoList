@@ -5,13 +5,13 @@ import User from "./pages/User.tsx";
 export const routes = [
     {
         path: '/task',
-        name: "Tâche",
+        name: 'task',
         icon: <TaskIcon/>,
         element: <Task/>
     },
     {
         path: '/user',
-        name: "Personne",
+        name: "person",
         icon: <UserIcon/>,
         element: <User/>
     }

@@ -2,6 +2,7 @@ import Input from "../Input";
 import React from "react";
 import MultiSelect from "../MultiSelect";
 import {Priority, Todo} from "../../models";
+import {useTranslation} from 'react-i18next';
 
 export enum FILTERS_KEYS {
     COMPLETED = 'completed',
@@ -11,18 +12,19 @@ export enum FILTERS_KEYS {
     PRIORITY_HIGH = 'priority_high',
 }
 
-const FILTERS_OPTIONS = [
-    {value: FILTERS_KEYS.COMPLETED, label: 'Terminée'},
-    {value: FILTERS_KEYS.NOT_COMPLETED, label: 'Non terminée'},
-    {value: FILTERS_KEYS.PRIORITY_LOW, label: 'Priorité faible'},
-    {value: FILTERS_KEYS.PRIORITY_MEDIUM, label: 'Priorité normale'},
-    {value: FILTERS_KEYS.PRIORITY_HIGH, label: 'Priorité élevée'},
-]
 
 const FilterTask = ({onFilter, todos}) => {
     const [filters, setFilters] = React.useState<string[]>([])
     const [search, setSearch] = React.useState<string>('')
+    const {t} = useTranslation();
 
+    const FILTERS_OPTIONS = [
+        {value: FILTERS_KEYS.COMPLETED, label: t('end')},
+        {value: FILTERS_KEYS.NOT_COMPLETED, label: t('pending')},
+        {value: FILTERS_KEYS.PRIORITY_LOW, label: t('low priority')},
+        {value: FILTERS_KEYS.PRIORITY_MEDIUM, label: t('medium priority')},
+        {value: FILTERS_KEYS.PRIORITY_HIGH, label: t('high priority')},
+    ]
 
     const onFilters = (value: string[]) => {
         setFilters(value);
@@ -70,10 +72,10 @@ const FilterTask = ({onFilter, todos}) => {
                     value={filters}
                     onChange={onFilters}
                     options={FILTERS_OPTIONS}
-                    placeholder={'Filtrer ...'}
+                    placeholder={t('filter')}
                 />
 
-                <Input  onChange={onSearch} value={search} placeholder={'Rechercher par titre ou assigné...'}/>
+                <Input onChange={onSearch} value={search} placeholder={t('search by')}/>
             </div>
         </>
     );

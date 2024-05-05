@@ -1,25 +1,32 @@
 import React, {useEffect, useState} from 'react';
 import Modal from "../Modal";
-import Input from "../Input";
 import Button from "../Button";
-import Services from "../../services";
-import {Assignee, Label, LABEL_OPTIONS, Priority, PRIORITY_OPTIONS, Todo} from "../../models";
-import Select, {SelectOption} from "../Select";
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import MultiSelect from "../MultiSelect";
-import InputDate from "../InputDate";
+import {Priority, Todo} from "../../models";
 import dayjs from "dayjs";
-import {renderPriority} from "../../pages/Task.tsx";
-
+import { useTranslation } from 'react-i18next';
+import {TagICon} from "../../utils.tsx";
 
 const DetailTask = (props: {
     open: boolean;
     onCancel: () => void;
     task?: Todo | null,
 }) => {
-    const {open, onCancel, actualiseDatas, task, users = []} = props;
 
+    const renderPriority = (priority: string) => {
+        switch (priority) {
+            case Priority.LOW:
+                return <div className={'flex items-center'}><TagICon className={'text-success mr-1'}/>{t('low')}</div>
+            case Priority.MEDIUM:
+                return <div className={'flex items-center'}><TagICon className={'text-info mr-1'}/>{t('medium')}</div>
+            case Priority.HIGH:
+                return <div className={'flex items-center'}><TagICon className={'text-danger mr-1'}/>{t('high')}</div>
+            default:
+                return <div className={'flex items-center'}><TagICon className={'text-info  mr-1'}/>{t('low')}</div>
+        }
+    }
+
+    const {open, onCancel, task} = props;
+    const { t } = useTranslation();
 
     return (
         <>
@@ -27,33 +34,33 @@ const DetailTask = (props: {
                 width={1000}
                 open={open}
                 onCancel={onCancel}
-                title={<div className={'capitalize'}>{task?.titre}  <span className={'text-success italic text-sm'}>{task?.endDate ? 'Terminée':''}</span></div>}
+                title={<div className={'capitalize'}>{task?.titre}  <span className={'text-success italic text-sm'}>{task?.endDate ? t('end'):''}</span></div>}
                 footer={[
                     <Button onClick={onCancel} className={'mr-2'} key={'cancel'}>
-                        Fermer
+                        {t('close')}
                     </Button>,
                 ]}
             >
                 <div className={''}>
                     <div className={'mb-2'}>
-                        <p className={'text-gray-500'}>Assigné à : <span
+                        <p className={'text-gray-500'}>{t('assign at')} : <span
                             className={'font-semibold'}>{task?.assignee?.name} / {task?.assignee?.email} </span></p>
 
                     </div>
                     <div className={'grid xl:grid-cols-2 grid-cols-1 mb-3'}>
                         <div className={''}>
-                            <p className={'text-gray-500'}>Date de début: <span
+                            <p className={'text-gray-500'}>{t('startAt')}: <span
                                 className={'font-semibold'}>{task?.startDate ? dayjs(task?.startDate).format('DD/MM/YYYY') : '-'}</span>
                             </p>
                         </div>
                         <div className={''}>
-                            <p className={'text-gray-500'}>Date de fin: <span
+                            <p className={'text-gray-500'}>{t('endAt')}: <span
                                 className={'font-semibold'}>{task?.endDate ? dayjs(task?.endDate).format('DD/MM/YYYY') : '-'}</span>
                             </p>
                         </div>
                     </div>
                     <div className={'mb-3'}>
-                        <div className={'text-gray-500 flex'}>Priorité: <span
+                        <div className={'text-gray-500 flex'}>{t('priority')}: <span
                             className={'font-semibold'}>{renderPriority(task?.priority)}</span></div>
                     </div>
 

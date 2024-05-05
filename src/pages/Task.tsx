@@ -6,28 +6,31 @@ import DataTable from "../Components/Table";
 import {CheckIcon, DeleteIcon, EditIcon, EyeIcon, TagICon} from "../utils.tsx";
 import {Assignee, Priority, Todo} from "../models";
 import Modal from "../Components/Modal";
-import Input from "../Components/Input";
 import AddTask from "../Components/AddTask";
 import dayjs from "dayjs";
 import DetailTask from "../Components/DetailTask";
-import Tooltip from "../Components/Tooltip";
 import FilterTask from "../Components/FilterTask";
+import { useTranslation } from 'react-i18next';
 
-export const renderPriority = (priority: string) => {
-    switch (priority) {
-        case Priority.LOW:
-            return <div className={'flex items-center'}><TagICon className={'text-success mr-1'}/> Faible</div>
-        case Priority.MEDIUM:
-            return <div className={'flex items-center'}><TagICon className={'text-info mr-1'}/> Normale</div>
-        case Priority.HIGH:
-            return <div className={'flex items-center'}><TagICon className={'text-danger mr-1'}/>Elevée</div>
-        default:
-            return <div className={'flex items-center'}><TagICon className={'text-info  mr-1'}/> Normale</div>
-    }
-}
+
 
 const User = () => {
     const service = new Services(true);
+
+    const { t } = useTranslation();
+
+    const renderPriority = (priority: string) => {
+        switch (priority) {
+            case Priority.LOW:
+                return <div className={'flex items-center'}><TagICon className={'text-success mr-1'}/>{t('low')}</div>
+            case Priority.MEDIUM:
+                return <div className={'flex items-center'}><TagICon className={'text-info mr-1'}/>{t('medium')}</div>
+            case Priority.HIGH:
+                return <div className={'flex items-center'}><TagICon className={'text-danger mr-1'}/>{t('high')}</div>
+            default:
+                return <div className={'flex items-center'}><TagICon className={'text-info  mr-1'}/>{t('low')}</div>
+        }
+    }
 
     const [open, setOpen] = useState(false);
     const [allTodos, setAllTodos] = useState<Todo[]>([]);
@@ -138,10 +141,10 @@ const User = () => {
     }
 
     const columns: GridColDef[] = [
-        {field: 'titre', headerName: 'Titre', width: 250},
+        {field: 'titre', headerName: t('title'), width: 250},
         {
             field: 'assignee',
-            headerName: 'Assigné à',
+            headerName: t('assign at'),
             width: 100,
             renderCell: (params) => (
                 <div className={'flex'}>
@@ -151,7 +154,7 @@ const User = () => {
         },
         {
             field: 'startDate',
-            headerName: 'Date début',
+            headerName: t('startAt'),
             width: 100,
             renderCell: (params) => (
                 <div className={'flex'}>
@@ -161,7 +164,7 @@ const User = () => {
         },
         {
             field: 'endDate',
-            headerName: 'Date fin',
+            headerName:t('endAt'),
             width: 100,
             renderCell: (params) => (
                 <div className={'text-center'}>
@@ -171,7 +174,7 @@ const User = () => {
         },
         {
             field: 'priority',
-            headerName: 'Priorité',
+            headerName: t('priority'),
             width: 150,
             renderCell: (params) => (
                 <div className={'text-center'}>
@@ -226,7 +229,7 @@ const User = () => {
                 <div className={'flex'}>
                     {params.row.endDate ? (
                         <span className={'text-success italic'}>
-                            Cette tâche est désormais terminée
+                            {t('task finish')}
                         </span>
                     ) : (
                         <Button
@@ -235,7 +238,9 @@ const User = () => {
                             onClick={() => {
                                 completeTask(params.row)
                             }}
-                        >Marquer terminée</Button>
+                        >
+                            {t('mark complete')}
+                        </Button>
                     )}
                 </div>
             )
@@ -247,7 +252,7 @@ const User = () => {
     return (
         <>
             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t mb-3">
-                <h3 className="text-xl font-semibold text-gray-900">Liste des tâches</h3>
+                <h3 className="text-xl font-semibold text-gray-900">{t('list task')}</h3>
             </div>
 
             <div className={'flex flex-col xl:flex-row justify-between mb-7'}>
@@ -267,7 +272,7 @@ const User = () => {
                             </svg>
                         }
                     >
-                        Ajouter une tâche
+                        {t('add task')}
                     </Button>
                 </div>
             </div>
@@ -290,19 +295,19 @@ const User = () => {
             <DetailTask open={openDe} onCancel={closeDetail} task={taskTemp}/>
 
             <Modal
-                title={'Confirmation de suppression'}
+                title={t('confirm delete')}
                 open={openDelete}
                 onCancel={onCancelD}
                 footer={[
-                    <Button className={'mr-2'} onClick={onCancelD}>Annuler</Button>,
+                    <Button className={'mr-2'} onClick={onCancelD}>{t('cancel')}</Button>,
                     <Button
                         onClick={() => deleteTask(taskTemp?.id)}
                         className={'bg-danger text-white border-none border-danger  hover:bg-red-500'}>
-                        Supprimer
+                        {t('delete')}
                     </Button>
                 ]}
             >
-                <p>Voulez vous vraiment supprimer <span className={'font-semibold'}>{taskTemp?.titre}</span> ?</p>
+                <p>{t('ask delete')} <span className={'font-semibold'}>{taskTemp?.titre}</span> ?</p>
             </Modal>
         </>
     );

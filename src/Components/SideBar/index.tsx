@@ -2,6 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import Button from "../Button";
 import {routes} from "../../routes.tsx";
 import {NavLink} from "react-router-dom";
+import Select from "../Select";
+import {useTranslation} from 'react-i18next';
+import {APP_KEY} from "../../services";
 
 
 interface SidebarProps {
@@ -11,8 +14,26 @@ interface SidebarProps {
 
 
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
+
+    const {t, i18n} = useTranslation();
     const trigger = useRef<any>(null);
     const sidebar = useRef<any>(null);
+    const [lang, setLang] = useState(localStorage.getItem(APP_KEY.LANG)|| 'fr');
+
+
+    const LANG = [
+        {label: 'Français', value: 'fr'},
+        {label: 'Anglais', value: 'en'}
+    ]
+
+
+    const changeLang = (e) => {
+        const {value} = e.target
+        setLang(value)
+
+        localStorage.setItem(APP_KEY.LANG, value)
+        i18n.changeLanguage(value);
+    }
     const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
 
     const [sidebarExpanded, setSidebarExpanded] = useState(
@@ -81,9 +102,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
             {/* <!-- SIDEBAR HEADER --> */}
 
             <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+                <div className={'px-4 my-2'}>
+                    <Select placeholder={t('change lang')} options={LANG} value={lang} onChange={changeLang}/>
+                </div>
                 {/* <!-- Sidebar Menu --> */}
                 <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
                     {/* <!-- Menu Group --> */}
+
                     <div>
                         <ul className="mb-6 flex flex-col gap-1.5">
                             {routes.map((route) => {
@@ -91,9 +116,10 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                                     <li>
                                         <NavLink to={`${route.path}`} className={'no-underline'}>
                                             {({isActive}) => (
-                                                <span className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark ${isActive ? 'rounded-r-lg bg-graydark font-semibold text-primary-2 bg-primary-3' : ''}`}>
+                                                <span
+                                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark ${isActive ? 'rounded-r-lg bg-graydark font-semibold text-primary-2 bg-primary-3' : ''}`}>
                                                      {route.icon}
-                                                    {route.name}
+                                                    {t(route.name)}
                                                 </span>
                                             )}
                                         </NavLink>
