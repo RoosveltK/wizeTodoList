@@ -11,6 +11,7 @@ import AddTask from "../Components/AddTask";
 import dayjs from "dayjs";
 import DetailTask from "../Components/DetailTask";
 import Tooltip from "../Components/Tooltip";
+import FilterTask from "../Components/FilterTask";
 
 export const renderPriority = (priority: string) => {
     switch (priority) {
@@ -93,11 +94,11 @@ const User = () => {
         setTaskTemp(null)
     }
 
-    const onSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // setSearch(e.target.value)
-        // const temp = [...allUsers]
-        // const search = temp.filter((elt: Assignee) => elt.name.toLowerCase().includes(e.target.value.toLowerCase()))
-        // setUsers(search)
+    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+        const temp = [...allTodos]
+        const search = temp.filter((elt: Todo) => elt.titre.toLowerCase().includes(e.target.value.toLowerCase()))
+        setUsers(search)
     }
 
     const actualiseDatas = (data: Todo) => {
@@ -130,6 +131,10 @@ const User = () => {
                     console.log('e', e)
                 }
             })
+    }
+
+    const onFilter = (filteredTodos: Todo[]) => {
+        setTodos(filteredTodos)
     }
 
     const columns: GridColDef[] = [
@@ -245,29 +250,26 @@ const User = () => {
                 <h3 className="text-xl font-semibold text-gray-900">Liste des tâches</h3>
             </div>
 
-            <div className={'flex justify-between'}>
+            <div className={'flex flex-col xl:flex-row justify-between mb-7'}>
                 <div>
-                    <Input
-                        placeholder={'Rechercher...'}
-                        value={search}
-                        onChange={onSearchUser}
-                    />
+                    <FilterTask onFilter={onFilter} todos={allTodos}/>
                 </div>
 
-
-                <Button
-                    className={'px-8 py-2.5 mb-4'}
-                    onClick={onOpen}
-                    icon={
-                        <svg className="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                             width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                  strokeWidth="2" d="M5 12h14m-7 7V5"/>
-                        </svg>
-                    }
-                >
-                    Ajouter une tâche
-                </Button>
+                <div>
+                    <Button
+                        className={'px-8 py-2'}
+                        onClick={onOpen}
+                        icon={
+                            <svg className="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                 width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                      strokeWidth="2" d="M5 12h14m-7 7V5"/>
+                            </svg>
+                        }
+                    >
+                        Ajouter une tâche
+                    </Button>
+                </div>
             </div>
 
 

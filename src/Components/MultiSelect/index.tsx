@@ -6,7 +6,7 @@ interface MultiSelectProps {
     onChange?: (value: SelectOption[]) => void;
     value?: SelectOption[];
     placeholder?: string;
-    label?: string;
+    width?: number;
     disabled?: boolean;
     options?: SelectOption[];
     multiple?: boolean;
@@ -17,7 +17,6 @@ interface MultiSelectProps {
 const MultiSelect = (props: MultiSelectProps) => {
     const {
         name,
-        label,
         onChange,
         placeholder = 'Choisissez une valeur',
         value,
@@ -53,16 +52,16 @@ const MultiSelect = (props: MultiSelectProps) => {
 
     const showSelectedOptions = () => options.filter((option) => selectedOptions.findIndex((v) => v === option.value) !== -1).map((option) => option.label)
     return (
-        <label className="relative" id={id}>
+        <label className="relative w-full" id={id}>
             <input type="checkbox" className="hidden peer"/>
 
             <div
-                className={`w-full h-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer after:content-['▼'] after:text-xs after:ml-1`}>
+                className={`w-full h-full max-w-[200px] max-h-16 overflow-y-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer after:content-['▼'] after:text-xs after:ml-1`}>
                 {selectedOptions.length > 0 ? showSelectedOptions().join(", ") : placeholder}
             </div>
 
             <div
-                className="absolute w-full bg-white border transition-opacity opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto">
+                className="absolute z-50 min-w-[200px] w-full bg-white border transition-opacity opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto">
                 <ul>
                     {options.map((option, i) => {
                         return (

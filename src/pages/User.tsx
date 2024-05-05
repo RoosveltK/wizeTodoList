@@ -111,11 +111,20 @@ const User = () => {
     ];
 
     const onSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
-        const temp = [...allUsers]
-        const search = temp.filter((elt: Assignee) => elt.name.toLowerCase().includes(e.target.value.toLowerCase()))
-        setUsers(search)
-    }
+        const searchTerm = e.target.value.toLowerCase();
+        setSearch(searchTerm);
+
+        const filteredUsers = allUsers.filter((user: Assignee) => {
+            const nameMatches = user.name.toLowerCase().includes(searchTerm);
+            const emailMatches = user.email.toLowerCase().includes(searchTerm);
+            const phoneMatches = user.phone?.toLowerCase().includes(searchTerm);
+
+            return nameMatches || emailMatches || phoneMatches;
+        });
+
+        setUsers(filteredUsers);
+    };
+
 
     return (
         <>
@@ -123,7 +132,7 @@ const User = () => {
                 <h3 className="text-xl font-semibold text-gray-900">Liste des personnes</h3>
             </div>
 
-            <div className={'flex justify-between'}>
+            <div className={'flex justify-between mb-7'}>
                 <div>
                     <Input
                         placeholder={'Rechercher...'}
@@ -134,7 +143,7 @@ const User = () => {
 
 
                 <Button
-                    className={'px-8 py-2.5 mb-4'}
+                    className={'px-8 py-2'}
                     onClick={onOpen}
                     icon={
                         <svg className="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
