@@ -83,6 +83,7 @@ class Services {
         return this.api.put(prefixUsers, data);
     }
 
+
     deleteUser(name: string) {
         return this.api.delete(`${prefixUsers}/${name}`);
     }

@@ -7,22 +7,27 @@ import DataTable from "../Components/Table";
 import {DeleteIcon, EditIcon} from "../utils.tsx";
 import {Assignee} from "../models";
 import Modal from "../Components/Modal";
+import Input from "../Components/Input";
 
 const User = () => {
     const service = new Services(true);
     const [open, setOpen] = useState(false);
+    const [allUsers, setAllUsers] = useState<Assignee[]>([]);
     const [users, setUsers] = useState<Assignee[]>([]);
     const [userTemp, setUserTemp] = useState<Assignee>(null);
     const [openDelete, setOpenDelete] = useState(false);
+    const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
         getUsers()
     }, [])
 
+
     const getUsers = () => {
         service.getUsers()
             .then((res) => {
                 setUsers(res.data)
+                setAllUsers(res.data)
             })
     }
 
@@ -33,6 +38,7 @@ const User = () => {
                 const search = temp.findIndex((elt: Assignee) => elt.name === name)
                 temp.splice(search, 1)
                 setUsers(temp)
+                setAllUsers(temp)
                 onCancelD()
             })
     }
@@ -64,6 +70,7 @@ const User = () => {
             temp[search] = data
 
         setUsers(temp)
+        setAllUsers(temp)
     }
 
     const columns: GridColDef[] = [
@@ -103,14 +110,29 @@ const User = () => {
         },
     ];
 
+    const onSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+        const temp = [...allUsers]
+        const search = temp.filter((elt: Assignee) => elt.name.toLowerCase().includes(e.target.value.toLowerCase()))
+        setUsers(search)
+    }
+
     return (
         <>
             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t mb-3">
                 <h3 className="text-xl font-semibold text-gray-900">Liste des personnes</h3>
             </div>
 
+            <div className={'flex justify-between'}>
+                <div>
+                    <Input
+                        placeholder={'Rechercher...'}
+                        value={search}
+                        onChange={onSearchUser}
+                    />
+                </div>
 
-            <div className={'text-end'}>
+
                 <Button
                     className={'px-8 py-2.5 mb-4'}
                     onClick={onOpen}
@@ -125,6 +147,7 @@ const User = () => {
                     Ajouter une personne
                 </Button>
             </div>
+
 
             <DataTable
                 columns={columns}
