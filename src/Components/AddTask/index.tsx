@@ -34,7 +34,6 @@ const AddTask = (props: {
     const [error, setError] = useState<Object>({});
 
     const initData = (todo: Todo) => {
-        console.log('task', task)
         setTitle(todo.titre)
         setLabels(todo.labels)
         setAssignee(todo.assignee)

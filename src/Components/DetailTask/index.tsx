@@ -27,7 +27,7 @@ const DetailTask = (props: {
                 width={1000}
                 open={open}
                 onCancel={onCancel}
-                title={<span className={'capitalize'}>{task?.titre}</span>}
+                title={<div className={'capitalize'}>{task?.titre}  <span className={'text-success italic text-sm'}>{task?.endDate ? 'Terminée':''}</span></div>}
                 footer={[
                     <Button onClick={onCancel} className={'mr-2'} key={'cancel'}>
                         Fermer

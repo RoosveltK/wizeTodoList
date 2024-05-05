@@ -1,31 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import Button from "../Components/Button";
-import AddUser from "../Components/AddUser";
 import Services from "../services";
 import {GridColDef} from "@mui/x-data-grid";
 import DataTable from "../Components/Table";
-import {DeleteIcon, EditIcon, EyeIcon, TagICon} from "../utils.tsx";
+import {CheckIcon, DeleteIcon, EditIcon, EyeIcon, TagICon} from "../utils.tsx";
 import {Assignee, Priority, Todo} from "../models";
 import Modal from "../Components/Modal";
 import Input from "../Components/Input";
 import AddTask from "../Components/AddTask";
 import dayjs from "dayjs";
 import DetailTask from "../Components/DetailTask";
+import Tooltip from "../Components/Tooltip";
 
-
-
-export  const renderPriority = (priority: string) => {
+export const renderPriority = (priority: string) => {
     switch (priority) {
         case Priority.LOW:
-            return <div className={'flex items-center'}> <TagICon className={'text-success mr-1'}/> Faible</div>
+            return <div className={'flex items-center'}><TagICon className={'text-success mr-1'}/> Faible</div>
         case Priority.MEDIUM:
-            return <div className={'flex items-center'}> <TagICon className={'text-info mr-1'}/> Normale</div>
+            return <div className={'flex items-center'}><TagICon className={'text-info mr-1'}/> Normale</div>
         case Priority.HIGH:
-            return <div className={'flex items-center'}> <TagICon className={'text-danger mr-1'}/>Elevée</div>
+            return <div className={'flex items-center'}><TagICon className={'text-danger mr-1'}/>Elevée</div>
         default:
-            return <div className={'flex items-center'}> <TagICon className={'text-info  mr-1'}/> Normale</div>
+            return <div className={'flex items-center'}><TagICon className={'text-info  mr-1'}/> Normale</div>
     }
 }
+
 const User = () => {
     const service = new Services(true);
 
@@ -68,12 +67,13 @@ const User = () => {
                 onCancelD()
             })
     }
-    
+
     const openDetail = () => {
         setOpenDe(true)
     }
     const closeDetail = () => {
         setOpenDe(false)
+        setTaskTemp(null)
     }
 
     const onOpenD = () => {
@@ -93,8 +93,44 @@ const User = () => {
         setTaskTemp(null)
     }
 
+    const onSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // setSearch(e.target.value)
+        // const temp = [...allUsers]
+        // const search = temp.filter((elt: Assignee) => elt.name.toLowerCase().includes(e.target.value.toLowerCase()))
+        // setUsers(search)
+    }
 
+    const actualiseDatas = (data: Todo) => {
+        const temp = [...todos]
+        const search = temp.findIndex((elt: Todo) => elt.id === data.id)
+        if (search === -1)
+            temp.unshift(data)
+        else
+            temp[search] = data
 
+        setTodos(temp)
+        setAllTodos(temp)
+    }
+
+    const completeTask = (todo: Todo) => {
+        const data = {
+            ...todo,
+            endDate: new Date()
+        }
+
+        service.editTodo({id: data?.id, todo: data})
+            .then(() => {
+                actualiseDatas(data)
+                onCancel()
+            })
+            .catch((err) => {
+                try {
+                    const {response} = err
+                } catch (e) {
+                    console.log('e', e)
+                }
+            })
+    }
 
     const columns: GridColDef[] = [
         {field: 'titre', headerName: 'Titre', width: 250},
@@ -142,21 +178,23 @@ const User = () => {
             field: 'action',
             headerName: 'Actions',
             sortable: false,
-            width:200,
+            width: 300,
             renderCell: (params) => (
                 <div className={'flex'}>
-                    <Button
-                        icon={<EditIcon className={'text-primary'}/>}
-                        className={'border-none hover:bg-transparent'}
-                        onClick={() => {
-                            setTaskTemp(params.row)
-                            onOpen()
-                        }}
-                    />
+                    {!params.row.endDate && (
+                        <Button
+                            icon={<EditIcon className={'text-primary'}/>}
+                            className={'border-none hover:bg-transparent px-2'}
+                            onClick={() => {
+                                setTaskTemp(params.row)
+                                onOpen()
+                            }}
+                        />
+                    )}
 
                     <Button
                         icon={<DeleteIcon className={'text-danger'}/>}
-                        className={'border-none hover:bg-transparent'}
+                        className={'border-none hover:bg-transparent px-2'}
                         onClick={() => {
                             setTaskTemp(params.row)
                             onOpenD()
@@ -164,7 +202,7 @@ const User = () => {
                     />
                     <Button
                         icon={<EyeIcon className={'text-primary'}/>}
-                        className={'border-none hover:bg-transparent'}
+                        className={'border-none hover:bg-transparent px-2'}
                         onClick={() => {
                             setTaskTemp(params.row)
                             openDetail()
@@ -174,26 +212,32 @@ const User = () => {
             )
 
         },
+        {
+            field: '--',
+            headerName: '',
+            sortable: false,
+            width: 300,
+            renderCell: (params) => (
+                <div className={'flex'}>
+                    {params.row.endDate ? (
+                        <span className={'text-success italic'}>
+                            Cette tâche est désormais terminée
+                        </span>
+                    ) : (
+                        <Button
+                            icon={<CheckIcon className={'text-success'}/>}
+                            className={'bg-success hover:bg-transparent hover:text-success text-white px-2'}
+                            onClick={() => {
+                                completeTask(params.row)
+                            }}
+                        >Marquer terminée</Button>
+                    )}
+                </div>
+            )
+
+        },
     ];
 
-    const onSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // setSearch(e.target.value)
-        // const temp = [...allUsers]
-        // const search = temp.filter((elt: Assignee) => elt.name.toLowerCase().includes(e.target.value.toLowerCase()))
-        // setUsers(search)
-    }
-
-    const actualiseDatas = (data: Todo) => {
-        const temp = [...todos]
-        const search = temp.findIndex((elt: Todo) => elt.id === data.id)
-        if (search === -1)
-            temp.unshift(data)
-        else
-            temp[search] = data
-
-        setTodos(temp)
-        setAllTodos(temp)
-    }
 
     return (
         <>
@@ -240,7 +284,7 @@ const User = () => {
                 actualiseDatas={actualiseDatas}
                 task={taskTemp}
             />
-            
+
             <DetailTask open={openDe} onCancel={closeDetail} task={taskTemp}/>
 
             <Modal
