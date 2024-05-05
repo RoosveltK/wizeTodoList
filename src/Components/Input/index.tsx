@@ -18,9 +18,9 @@ const Input = (props: {
                              className="block mb-2 text-sm font-medium text-gray-900">{label}</label>}
             <input
                 {...props}
-                type="text"
+                type={props.type || 'text'}
                 id={id}
-                className={`bg-gray-50 border border-gray-300 text-gray-900 
+                className={`h-full  bg-gray-50 border border-gray-300 text-gray-900 
                 text-sm rounded-lg 
                 focus:ring-blue-500 focus:border-blue-500 
                 block w-full p-3 ${className} ${disabled ? 'cursor-not-allowed bg-gray-300' : ''}`}

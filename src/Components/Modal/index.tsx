@@ -10,14 +10,15 @@ const Modal = (props: {
     onCancel: MouseEventHandler<HTMLButtonElement>;
     onConfirm?: MouseEventHandler<HTMLButtonElement>;
     footer?: ReactNode;
+    width?: number;
 }) => {
-    const {children, title, open, onCancel,onConfirm, footer, bodyClassName} = props;
+    const {children, title, open, onCancel,onConfirm, footer, bodyClassName, width=700} = props;
     return (
         <>
             {open && (
                 <div
                     className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="relative p-4 w-full max-w-2xl">
+                    <div className={`relative p-4 w-full`} style={{width:width}}>
                         <div className="relative bg-white rounded-lg shadow">
                             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
