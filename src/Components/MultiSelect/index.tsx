@@ -57,7 +57,7 @@ const MultiSelect = (props: MultiSelectProps) => {
             <input type="checkbox" className="hidden peer"/>
 
             <div
-                className={`w-full h-full max-w-[200px] max-h-16 overflow-y-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer after:content-['▼'] after:text-xs after:ml-1`}>
+                className={`w-full h-full max-h-16 overflow-y-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer after:content-['▼'] after:text-xs after:ml-1`}>
                 {selectedOptions.length > 0 ? <>{t(showSelectedOptions().join(", "))}</> : t(placeholder)}
             </div>
 

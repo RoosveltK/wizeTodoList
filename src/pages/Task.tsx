@@ -255,7 +255,7 @@ const User = () => {
                 <h3 className="text-xl font-semibold text-gray-900">{t('list task')}</h3>
             </div>
 
-            <div className={'flex flex-col xl:flex-row justify-between mb-7'}>
+            <div className={'flex flex-col lg:flex-row  gap-y-2 justify-between mb-7'}>
                 <div>
                     <FilterTask onFilter={onFilter} todos={allTodos}/>
                 </div>

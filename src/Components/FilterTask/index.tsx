@@ -67,12 +67,13 @@ const FilterTask = ({onFilter, todos}) => {
 
     return (
         <>
-            <div className={'flex w-full space-x-3 items-center'}>
+            <div className={'flex flex-col lg:flex-row gap-y-2 w-full space-x-3 items-center'}>
                 <MultiSelect
                     value={filters}
                     onChange={onFilters}
                     options={FILTERS_OPTIONS}
                     placeholder={t('filter')}
+                    className={'w-100'}
                 />
 
                 <Input onChange={onSearch} value={search} placeholder={t('search by')}/>

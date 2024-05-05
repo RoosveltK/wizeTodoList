@@ -134,7 +134,7 @@ const User = () => {
                 <h3 className="text-xl font-semibold text-gray-900">{t('person list')}</h3>
             </div>
 
-            <div className={'flex justify-between mb-7'}>
+            <div className={'flex lg:flex-row flex-col gap-y-2 justify-between mb-7'}>
                 <div>
                     <Input
                         placeholder={t('search')}
