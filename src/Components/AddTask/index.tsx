@@ -50,6 +50,7 @@ const AddTask = (props: {
         setEndDate(null);
         setPriority('');
         setLabels([]);
+        setAssignee(null)
     }
 
     useEffect(() => {

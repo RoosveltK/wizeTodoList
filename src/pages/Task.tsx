@@ -38,7 +38,6 @@ const User = () => {
     const [users, setUsers] = useState<Assignee[]>([]);
     const [taskTemp, setTaskTemp] = useState<Todo>(null);
     const [openDelete, setOpenDelete] = useState(false);
-    const [search, setSearch] = useState<string>('')
     const [openDe, setOpenDe] = useState(false)
 
     useEffect(() => {
@@ -97,12 +96,6 @@ const User = () => {
         setTaskTemp(null)
     }
 
-    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
-        const temp = [...allTodos]
-        const search = temp.filter((elt: Todo) => elt.titre.toLowerCase().includes(e.target.value.toLowerCase()))
-        setUsers(search)
-    }
 
     const actualiseDatas = (data: Todo) => {
         const temp = [...todos]
