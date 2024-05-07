@@ -20,10 +20,10 @@ const Input = (props: {
                 {...props}
                 type={props.type || 'text'}
                 id={id}
-                className={`h-full  bg-gray-50 border border-gray-300 text-gray-900 
+                className={`h-full bg-gray-50 border border-gray-300 text-gray-900 
                 text-sm rounded-lg 
                 focus:ring-blue-500 focus:border-blue-500 
-                block w-full p-3 ${className} ${disabled ? 'cursor-not-allowed bg-gray-300' : ''}`}
+                block w-full p-3 ${className}`}
                 onChange={onChange}
             />
         </>

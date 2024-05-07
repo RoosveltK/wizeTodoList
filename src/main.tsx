@@ -1,31 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import {
-    createBrowserRouter,
-    RouterProvider,
-} from "react-router-dom";
 import './index.css'
-import {routes} from "./routes.tsx";
-import Error from "./pages/Error.tsx";
 import './i18n.ts'
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import Task from "./pages/Task.tsx";
+import User from "./pages/User.tsx";
 
 
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App/>,
-        children: [
-            ...routes
-        ],
-        errorElement: <Error/>,
-    },
-]);
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <RouterProvider router={router}/>
+        <BrowserRouter>
+            <Routes>
+                <Route element={<App/>}>
+                    <Route path="task" element={<Task/>}/>
+                    <Route path="user" element={<User />}/>
+                </Route>
+                <Route path="/" element={<Navigate to={'/task'} replace/>}/>
+            </Routes>
+        </BrowserRouter>
     </React.StrictMode>,
 )

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 
 
-const User = () => {
+const Task = () => {
     const service = new Services(true);
 
     const { t } = useTranslation();
@@ -277,13 +277,16 @@ const User = () => {
                 getRowId={(row) => row.id}
             />
 
-            <AddTask
-                open={open}
-                onCancel={onCancel}
-                users={users}
-                actualiseDatas={actualiseDatas}
-                task={taskTemp}
-            />
+            {open && (
+                <AddTask
+                    open={open}
+                    onCancel={onCancel}
+                    users={users}
+                    actualiseDatas={actualiseDatas}
+                    task={taskTemp}
+                />
+            )}
+
 
             <DetailTask open={openDe} onCancel={closeDetail} task={taskTemp}/>
 
@@ -305,4 +308,4 @@ const User = () => {
         </>
     );
 };
-export default User
+export default Task

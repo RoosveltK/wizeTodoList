@@ -8,10 +8,10 @@ import {DeleteIcon, EditIcon} from "../utils.tsx";
 import {Assignee} from "../models";
 import Modal from "../Components/Modal";
 import Input from "../Components/Input";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const User = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const service = new Services(true);
     const [open, setOpen] = useState(false);
     const [allUsers, setAllUsers] = useState<Assignee[]>([]);
@@ -166,12 +166,15 @@ const User = () => {
                 getRowId={(row) => row.name}
             />
 
-            <AddUser
-                open={open}
-                onCancel={onCancel}
-                actualiseDatas={actualiseDatas}
-                user={userTemp}
-            />
+            {open && (
+                <AddUser
+                    open={open}
+                    onCancel={onCancel}
+                    actualiseDatas={actualiseDatas}
+                    user={userTemp}
+                />
+            )}
+
 
             <Modal
                 title={t('confirm delete')}

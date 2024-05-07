@@ -23,10 +23,10 @@ const InputDate = ({
     const id = useId();
     const [inputType, setInputType] = useState<'text' | 'date'>('text');
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
     useEffect(() => {
-        handleFocus()
+        if(value){
+            handleFocus()
+        }
     }, [value]);
 
 
@@ -62,6 +62,7 @@ const InputDate = ({
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     value={value}
+                    defaultValue={value}
                     placeholder={placeholder}
                     disabled={disabled}
                 />

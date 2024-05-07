@@ -4,13 +4,13 @@ import Input from "../Input";
 import Button from "../Button";
 import Services from "../../services";
 import {Assignee, Label, LABEL_OPTIONS, Priority, PRIORITY_OPTIONS, Todo} from "../../models";
-import Select, {SelectOption} from "../Select";
+import Select from "../Select";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import MultiSelect from "../MultiSelect";
 import InputDate from "../InputDate";
 import dayjs from "dayjs";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const AddTask = (props: {
     open: boolean;
@@ -19,7 +19,7 @@ const AddTask = (props: {
     task?: Todo | null,
     users?: Assignee[]
 }) => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const {open, onCancel, actualiseDatas, task, users = []} = props;
     const service = new Services(true);
@@ -36,13 +36,19 @@ const AddTask = (props: {
     const [error, setError] = useState<Object>({});
 
     const initData = (todo: Todo) => {
-        setTitle(todo.titre)
-        setLabels(todo.labels)
-        setAssignee(todo.assignee)
-        setStartDate(todo.startDate ? dayjs(todo.startDate).format('YYYY-DD-MM') : null)
-        setPriority(todo.priority)
-        setDescription(todo.description)
+        console.log('task', task)
+        if(todo){
+            setTitle(todo.titre)
+            setLabels(todo.labels)
+            setAssignee(todo.assignee)
+            setStartDate(todo.startDate ? dayjs(todo.startDate).format('YYYY-DD-MM') : null)
+            setPriority(todo.priority)
+            setDescription(todo.description)
+        }
+
     }
+
+
     const resetField = () => {
         setTitle('');
         setDescription('');
@@ -54,9 +60,7 @@ const AddTask = (props: {
     }
 
     useEffect(() => {
-        if (task) {
-            initData(task)
-        }
+        initData(task)
     }, [task])
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +82,7 @@ const AddTask = (props: {
                 break;
         }
     }
-    const titleValidation = (name: string) => name.trim().length >= 3
+    const titleValidation = (name: string) => name && name.trim().length >= 3
 
     const onSubmit = () => {
         setLoading(true)
@@ -169,7 +173,7 @@ const AddTask = (props: {
                         {t('cancel')}
                     </Button>,
                     <Button loading={loading} onClick={onSubmit} className={'bg-primary text-white'} key={'submit'}>
-                        {task ? t('update') :  t('add')}
+                        {task ? t('update') : t('add')}
                     </Button>
                 ]}
             >
@@ -181,7 +185,7 @@ const AddTask = (props: {
                             name={'title'}
                             onChange={onChange}
                             id={'name'}
-                            className={`${error?.title ? 'border-2 border-danger' : ''}`}
+                            className={`${error?.title ? 'border-2 !border-danger' : ''}`}
                         />
                         <small className={'text-danger'}>{t(error?.title)}</small>
                     </div>
@@ -189,7 +193,7 @@ const AddTask = (props: {
                         <div>
                             <Autocomplete
                                 disablePortal
-                                className={`bg-gray-50 border text-gray-900 rounded-lg ${error?.assignee ? 'border-2 border-danger' : ' border-gray-300'}`}
+                                className={`bg-gray-50 border text-gray-900 rounded-lg ${error?.assignee ? 'border-2 !border-danger' : ' border-gray-300'}`}
                                 options={users}
                                 sx={{width: '100%'}}
                                 getOptionLabel={(option) => option.name}
@@ -208,7 +212,7 @@ const AddTask = (props: {
                                 placeholder={t('startAt')}
                                 type="date"
                                 onChange={onChange}
-                                className={`${error?.startDate ? 'border-2 border-danger' : ''}`}
+                                className={`${error?.startDate ? 'border-2 !border-danger' : ''}`}
                             />
                         </div>
 

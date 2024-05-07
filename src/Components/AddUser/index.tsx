@@ -23,9 +23,9 @@ const AddUser = (props: {
     const [error, setError] = useState<Object>({});
 
     const initData = (user: Assignee) => {
-        setName(user.name)
-        setEmail(user.email)
-        setPhone(user.phone)
+        setName(user?.name)
+        setEmail(user?.email)
+        setPhone(user?.phone)
     }
     const resetField = () => {
         setName('')
@@ -34,9 +34,7 @@ const AddUser = (props: {
     }
 
     useEffect(() => {
-        if (user) {
-            initData(user)
-        }
+        initData(user)
     }, [user])
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +51,8 @@ const AddUser = (props: {
                 break;
         }
     }
-    const nameValidation = (name: string) => name.trim().length >= 3
-    const emailValidation = (email: string) => email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+    const nameValidation = (name: string) => name && name.trim().length >= 3
+    const emailValidation = (email: string) => email && email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 
     const onSubmit = () => {
         setLoading(true)
@@ -142,7 +140,7 @@ const AddUser = (props: {
                             name={'name'}
                             onChange={onChange}
                             id={'name'}
-                            className={`${error?.name ? 'border-2 border-danger' : ''}`}
+                            className={`${error?.name ? 'border-2 !border-danger' : ''}`}
                             disabled={!!user}
                         />
                         <small className={'text-danger'}>{t(error?.name)}</small>
@@ -156,7 +154,7 @@ const AddUser = (props: {
                             onChange={onChange}
                             id={'email'}
                             type={'email'}
-                            className={`${error?.email ? 'border-2 border-danger' : ''}`}
+                            className={`${error?.email ? 'border-2 !border-danger' : ''}`}
                         />
                         <small className={'text-danger'}>{t(error?.email)}</small>
                     </div>
